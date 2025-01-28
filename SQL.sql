@@ -1206,5 +1206,174 @@ from employees;
 
 --Upper Case first and Last Name
 
+Select First_Name,
+Upper(First_Name) as Upper_First_Name,
+Last_Name,
+Upper(Last_Name) as Upper_Last_Name
+From Employees;
 
+--Concatenation, Boolean Expression, Wildcards
+
+Select first_name, Last_Name,
+first_Name || ' ' || Last_Name as Full_Name
+from Employees
+
+--if person makes more than 50k then true else false
+
+Select 
+first_name, last_name, salary, 
+(Salary>50000) As Salary_more_than_50k
+from employees;
+
+--if person is female and makes more than 50k then true else false
+
+Select
+first_Name || ' ' || Last_Name as full_Name, Salary, gender,
+(Salary > 50000 and gender = 'F') as Women_earning_more_than_50k
+from employees;
+
+--Boolean Expression with Wildcards
+
+Select email_Id,
+(email_id like '%.com') as dotcom_flag
+from employees;
+
+--Substring, Position and Coalesce
+--Substring
+
+Select email_id,
+Substring(email_id from 4)
+from employees;
+
+--Position
+--Findidng position of '@' in the email column
+
+Select email_id,
+Position( '@' in Email_id)
+from Employees;
+
+--Substring & Position
+
+Select email_id,
+Substring(email_id from position('@' in Email_id)+1)
+from employees;
+
+--Coalesce
+
+Select email_id,
+coalesce(email_id, 'No Email Provided')
+from employees;
+
+--MIN, MAX, AVAERAGE, SUM, COUNT
+
+Select Min(Salary)
+from employees;
+
+Select Max(Salary)
+from employees;
+
+Select avg(Salary)
+from employees;
+
+Select round(avg(salary),0)
+from employees;
+
+Select sum(Salary)
+from employees;
+
+Select Count(*)
+from employees;
+
+--Group By and Having
+
+--Return number of employees for each of the coffeeshops
+Select coffeeshop_id, count(employee_id)
+from employees
+Group by coffeeshop_id
+
+--Return total salaries for each coffeeshop
+Select coffeeshop_id, sum(salary)
+from employees
+group by coffeeshop_id
+
+Select coffeeshop_id,
+count(coffeeshop_id) as Number_of_coffeeshops,
+Avg(salary) as Avg_salary,
+Max(Salary) as Max_Salary,
+Min(Salary) as Min_Salary
+from employees
+group by coffeeshop_id
+Having count(coffeeshop_id) > 190
+order by Max_Salary desc;
+
+-- Return only the coffeeshop where min salary is less than 20k
+
+Select coffeeshop_id, 
+count(employee_id) as Number_of_Employees,
+Max(Salary) as Max_Salary,
+Min(Salary) as Min_Salary
+from employees
+group by coffeeshop_id
+Having Min(Salary) < 20000
+Order by Min(Salary);
+
+-- JOIN
+
+-- Inserting values just for JOIN exercises
+INSERT INTO locations VALUES (4, 'Paris', 'France');
+INSERT INTO shops VALUES (6, 'Happy Brew', NULL);
+
+-- Checking the values we inserted
+SELECT * FROM shops;
+SELECT * FROM locations;
+
+-- "INNER JOIN" same as just "J0iN"
+SELECT 
+	s.coffeeshop_name,
+	l.city,
+	l.country
+FROM (
+	shops s
+	inner JOIN locations as l
+	ON s.city_id = l.city_id
+);
+
+SELECT
+  s.coffeeshop_name,
+  l.city,
+  l.country
+FROM
+  shops s
+  JOIN locations l
+  ON s.city_id = l.city_id;
+
+-- LEFT JOIN
+SELECT
+  s.coffeeshop_name,
+  l.city,
+  l.country
+FROM
+	shops s
+	LEFT JOIN locations l
+	ON s.city_id = l.city_id;
+
+-- RIGHT JOIN
+SELECT
+  s.coffeeshop_name,
+  l.city,
+  l.country
+FROM
+	shops s
+	RIGHT JOIN locations l
+	ON s.city_id = l.city_id;
+
+-- FULL OUTER JOIN
+SELECT
+  s.coffeeshop_name,
+  l.city,
+  l.country
+FROM
+	shops s
+	FULL OUTER JOIN locations l
+	ON s.city_id = l.city_id;
 
